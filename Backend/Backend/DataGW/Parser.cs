@@ -16,7 +16,7 @@ namespace Backend.DataGW
             string urlMonitory = "https://www.x-kom.pl/g-6/c/15-monitory.html";
             string urlDrukarki = "https://www.x-kom.pl/g-6/c/6-drukarki.html";
             string urlKomputery = "https://www.x-kom.pl/g-2/c/175-komputery-stacjonarne.html";
-            string databasePath = @"C:\Users\48607\Desktop\Project\Reactivities\API\reactivities.db";
+            string databasePath = "Server=tcp:serwere.database.windows.net,1433;Initial Catalog=ParserowaBaza;Persist Security Info=False;User ID={your_UserId};Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
             using (var connection = new SqliteConnection("Data Source=" + databasePath))
             {
                 connection.Open();
