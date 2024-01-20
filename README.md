@@ -14,8 +14,12 @@ WEEK1:
 - Sebastian - cart / favourtie product page - done
 - Szymon - login/register backend functionality - WiP
 
+- Tasks in feature branch to be reviewed after pull requests and merged to develop branch
+
 WEEK2:
 - x - backend functionality for products management (cart)
 - x - parser compatibility for additional stores
 - x - frontend additional features for pages
 - x - 
+
+- Tasks in feature branch to be reviewed after pull requests and merged to develop branch
