@@ -53,7 +53,6 @@ const Center = styled.div`
 const Logo = styled.div`
   font-size: 60px;
   font-weight: bold;
-  text-align: center;
   font-family: "Roboto";
   ${mobile({ fontSize: "24px" })}
   color: black;
@@ -97,10 +96,32 @@ const Navbar = () => {
     <Container>
       <Wrapper>
         <Left>
+          <Language>EN</Language>
+          <SearchContainer>
+            <Input placeholder="Search" />
+            <Search style={{ color: "gray", fontSize: 16 }} />
+          </SearchContainer>
+        </Left>
+        <Center>
           <Link to={"../"} style={linkStyle}>
             <Logo>BestSalesHub</Logo>
           </Link>
-        </Left>
+        </Center>
+        <Right>
+          <Link to={"/login"}>
+            <MenuItem>ZALOGUJ SIĘ</MenuItem>
+          </Link>
+          <Link to={"/register"}>
+            <MenuItem>ZAREJESTRUJ SIĘ</MenuItem>
+          </Link>
+          <Link to={"/cart"}>
+            <MenuItem>
+              <Badge badgeContent={data || 0} color="primary">
+                <ShoppingCartOutlined />
+              </Badge>
+            </MenuItem>
+          </Link>
+        </Right>
       </Wrapper>
     </Container>
   );
