@@ -1,5 +1,5 @@
-  import axios from "axios";
-  import cheerio from 'cheerio';
+import axios from "axios";
+import cheerio from 'cheerio';
 
   export const sliderItems = [
     {

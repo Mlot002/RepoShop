@@ -19,6 +19,10 @@
       <Router>
         <Routes>
           <Route path="/" element={<Home />}></Route>
+          <Route
+            path="/login"
+            element={user ? <Navigate to="/" /> : <Login />}
+          ></Route>
           <Route path="/product/:id" element={<Product />}></Route>
           <Route path="/products/:category" element={<Products />}></Route>
           <Route path="/products/" element={<Products />}></Route>
