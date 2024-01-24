@@ -8,6 +8,7 @@ import cheerio from 'cheerio';
       title: "SUMMER SALE",
       desc: "DON'T DEAL WITH OUR PRICES.",
       bg: "fbf0f4",
+      link: "/products/laptopy",
     },
     {
       id: 2,
@@ -15,6 +16,7 @@ import cheerio from 'cheerio';
       title: "STOCK CLEARENCE",
       desc: "DON'T DEAL WITH OUR PRICES.",
       bg: "f5fafd",
+      link: "/products/komputery",
     },
     {
       id: 3,
@@ -22,6 +24,7 @@ import cheerio from 'cheerio';
       title: "PRINT CHEAPLY",
       desc: "DON'T DEAL WITH OUR PRICES.",
       bg: "fcf1ed",
+      link: "/products/drukarki",
     },
   ];
 

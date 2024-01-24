@@ -5,6 +5,7 @@ import {
 import styled from "styled-components";
 import React, { useState } from "react";
 import { sliderItems } from "../data";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
@@ -103,7 +104,9 @@ const Slider = () => {
             <InfoContainer>
               <Title>{item.title}</Title>
               <Desc>{item.desc}</Desc>
+              <Link to={item.link}>
               <Button>SHOW NOW</Button>
+              </Link>
             </InfoContainer>
           </Slide>
         ))}

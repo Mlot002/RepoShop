@@ -3,6 +3,8 @@
   import Register from "./pages/Register";
   import Login from "./pages/Login";
   import Cart from "./pages/Cart";
+  import Like from "./pages/Like";
+
   import {
     BrowserRouter as Router,
     Routes,
@@ -19,9 +21,14 @@
       <Router>
         <Routes>
           <Route path="/" element={<Home />}></Route>
+          <Route path="/like" element={<Like />}></Route>
           <Route
             path="/login"
             element={user ? <Navigate to="/" /> : <Login />}
+          ></Route>
+           <Route
+            path="/register"
+            element={user ? <Navigate to="/" /> : <Register />}
           ></Route>
           <Route path="/product/:id" element={<Product />}></Route>
           <Route path="/products/:category" element={<Products />}></Route>

@@ -1,4 +1,5 @@
-import { Search, ShoppingCartOutlined } from "@mui/icons-material";
+import { Search } from "@mui/icons-material";
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Badge } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
@@ -114,10 +115,10 @@ const Navbar = () => {
           <Link to={"/register"}>
             <MenuItem>ZAREJESTRUJ SIĘ</MenuItem>
           </Link>
-          <Link to={"/cart"}>
+          <Link to={"/like"}>
             <MenuItem>
               <Badge badgeContent={data || 0} color="primary">
-                <ShoppingCartOutlined />
+                <FavoriteBorderIcon  />
               </Badge>
             </MenuItem>
           </Link>
