@@ -1,4 +1,4 @@
-  import Home from "./pages/Home";
+import Home from "./pages/Home";
   import Product from "./pages/Product";
   import Register from "./pages/Register";
   import Login from "./pages/Login";
@@ -20,20 +20,20 @@
     return (
       <Router>
         <Routes>
-          <Route path="/" element={<Home />}></Route>
-          <Route path="/like" element={<Like />}></Route>
+          <Route path="/" element={<Home />} />
+          <Route path="/like" element={<Like />} />
           <Route
             path="/login"
             element={user ? <Navigate to="/" /> : <Login />}
-          ></Route>
-           <Route
+          />
+          <Route
             path="/register"
             element={user ? <Navigate to="/" /> : <Register />}
-          ></Route>
-          <Route path="/product/:id" element={<Product />}></Route>
-          <Route path="/products/:category" element={<Products />}></Route>
-          <Route path="/products/" element={<Products />}></Route>
-          <Route path="/prod/" element={<Protected />}></Route>
+          />
+          <Route path="/product/:category/:id" element={<Product />} />
+          <Route path="/products/:category" element={<Products />} />
+          <Route path="/products/" element={<Products />} />
+          <Route path="/prod/" element={<Protected />} />
         </Routes>
       </Router>
     );
