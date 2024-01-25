@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -10,14 +10,21 @@ public class Program
     public static async Task Main(string[] args)
     {
         var host = CreateHostBuilder(args).Build();
-        await Parser.ParseAsync();
-
+        try
+        {
+            var parser = new Parser();
+            await parser.ParseAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Wystąpił błąd: {ex.Message}");
+        }
         using (var scope = host.Services.CreateScope())
         {
             var services = scope.ServiceProvider;
             try
             {
-                // Wykonaj migracje lub inne inicjalizacje danych, je�li s� potrzebne
+                // Wykonaj migracje lub inne inicjalizacje danych, jeœli s¹ potrzebne
             }
             catch (Exception ex)
             {
@@ -46,7 +53,7 @@ public class Program
                         });
                     });
 
-                    // Dodaj pozosta�e us�ugi
+                    // Dodaj pozosta³e us³ugi
                     services.AddControllers();
                     services.AddEndpointsApiExplorer();
                     services.AddSwaggerGen();

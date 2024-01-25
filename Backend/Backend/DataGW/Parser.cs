@@ -1,118 +1,91 @@
 ﻿using HtmlAgilityPack;
+using System;
 using System.Data.SqlClient;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Backend.DataGW
 {
     public class Parser
     {
-        SqlConnection conn = new SqlConnection("Data Source=serwere.database.windows.net; Initial Catalog=ParserowaBaza; User Id=Root69; Password=RootToToor123");
+        private readonly HttpClient _httpClient;
+        private readonly string _databaseConnectionString;
 
-        public static async Task ParseAsync()
+        public Parser()
         {
-            string product = "Laptopy";
-            int pageCount = 1;
-            string urlLaptopy = "https://www.x-kom.pl/g-2/c/159-laptopy-notebooki-ultrabooki.html";
-            string urlSmartfony = "https://www.x-kom.pl/g-4/c/1590-smartfony-i-telefony.html";
-            string urlTelewizory = "https://www.x-kom.pl/g-8/c/1117-telewizory.html";
-            string urlTablety = "https://www.x-kom.pl/g-4/c/1663-tablety.html";
-            string urlMonitory = "https://www.x-kom.pl/g-6/c/15-monitory.html";
-            string urlDrukarki = "https://www.x-kom.pl/g-6/c/6-drukarki.html";
-            string urlKomputery = "https://www.x-kom.pl/g-2/c/175-komputery-stacjonarne.html";
-            string databasePath = "Data Source=serwere.database.windows.net; Initial Catalog=ParserowaBaza; User Id=Toor69; Password=RootToToor321";
-            using (var connection = new SqlConnection(databasePath))
-            {
-                connection.Open();
-                using (var command = connection.CreateCommand())
+            _httpClient = new HttpClient();
+            _httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
+            _databaseConnectionString = "Data Source=serwere.database.windows.net; Initial Catalog=ParserowaBaza; User Id=Toor69; Password=RootToToor321";
+        }
 
-                {
-                    //await ParserAsync(urlLaptopy, pageCount, product, command);
-                    //product = "Smartfony";
-                    //await ParserAsync(urlSmartfony, pageCount, product, command);
-                    //product = "Telewizory";
-                    //await ParserAsync(urlTelewizory, pageCount, product, command);
-                    //product = "Tablety";
-                    //await ParserAsync(urlTablety, pageCount, product, command);
-                    //product = "Monitory";
-                    //await ParserAsync(urlMonitory, pageCount, product, command);
-                    //product = "Drukarki";
-                    //await ParserAsync(urlDrukarki, pageCount, product, command);
-                    //product = "Komputery";
-                    //await ParserAsync(urlKomputery, pageCount, product, command);
-                }
+        public async Task ParseAsync()
+        {
+            var products = new[]
+            {
+                new { Name = "Laptopy", Url = "https://www.x-kom.pl/g-2/c/159-laptopy-notebooki-ultrabooki.html" },
+                new { Name = "Smartfony", Url = "https://www.x-kom.pl/g-4/c/1590-smartfony-i-telefony.html" },
+                new { Name = "Telewizory", Url = "https://www.x-kom.pl/g-8/c/1117-telewizory.html" },
+                new { Name = "Tablety", Url = "https://www.x-kom.pl/g-4/c/1663-tablety.html" },
+                new { Name = "Monitory", Url = "https://www.x-kom.pl/g-6/c/15-monitory.html" },
+                new { Name = "Drukarki", Url = "https://www.x-kom.pl/g-6/c/6-drukarki.html" },
+                new { Name = "Komputery stacjonarne", Url = "https://www.x-kom.pl/g-2/c/175-komputery-stacjonarne.html" }
+            };
+
+            foreach (var product in products)
+            {
+                await ParseProductAsync(product.Url, product.Name);
             }
         }
 
-        private static async Task ParserAsync(string urlBase, int pageCount, string productName, SqlCommand command)
+        private async Task ParseProductAsync(string url, string productName)
         {
-            string div = "//div[@class='sc-1s1zksu-0 dzLiED sc-162ysh3-1 irFnoT']";
-            // klient HTTP
-            var client = new HttpClient();
-            // Obejscie ciastek
-            client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
-
-            // Parsowanie zawartości HTML przy użyciu HtmlAgilityPack
-            var document = new HtmlDocument();
-
-            for (int i = 1; i <= pageCount; i++)
+            for (int i = 1; i <= 1; i++)
             {
-                // Tworzenie adresu URL dla kolejnej strony
-                string url = $"{urlBase}?page={i}";
+                string pageUrl = $"{url}?page={i}";
+                var content = await FetchPageContentAsync(pageUrl);
+                await ProcessContentAsync(content, productName);
+            }
+        }
 
-                // Pobranie zawartości strony
-                var response = await client.GetAsync(url);
-                var content = await response.Content.ReadAsStringAsync();
+        private async Task<string> FetchPageContentAsync(string url)
+        {
+            var response = await _httpClient.GetAsync(url);
+            return await response.Content.ReadAsStringAsync();
+        }
 
-                // Parsowanie zawartości HTML przy użyciu HtmlAgilityPack
-                document.LoadHtml(content);
-                int id = 0;
-                // Znalezienie elementów zawierających informacje o produktach
-                var _products = document.DocumentNode.SelectNodes(div);
-                foreach (var _product in _products)
+        private async Task ProcessContentAsync(string content, string productName)
+        {
+            var document = new HtmlDocument();
+            document.LoadHtml(content);
+            var divSelector = "//div[@class='sc-1s1zksu-0 dzLiED sc-162ysh3-1 irFnoT']";
+            var products = document.DocumentNode.SelectNodes(divSelector);
+
+            using (var connection = new SqlConnection(_databaseConnectionString))
+            {
+                await connection.OpenAsync();
+                var command = connection.CreateCommand();
+
+                command.CommandText = $"DELETE FROM {productName}";
+                await command.ExecuteNonQueryAsync();
+                var id = 1;
+                foreach (var productNode in products)
                 {
-                    var name = _product.Descendants("h3").First().InnerText.Trim();
-                    var link = _product.Descendants("a").First().Attributes["href"].Value;
-                    var price = _product.Descendants("span").FirstOrDefault(n => n.Attributes["data-name"]?.Value == "productPrice")?.InnerText.Trim();
-                    var image = _product.Descendants("img").First().Attributes["src"].Value;
+                    var name = productNode.Descendants("h3").FirstOrDefault()?.InnerText.Trim();
+                    var link = productNode.Descendants("a").FirstOrDefault()?.Attributes["href"]?.Value;
+                    var price = productNode.Descendants("span").FirstOrDefault(n => n.Attributes["data-name"]?.Value == "productPrice")?.InnerText.Trim();
+                    var image = productNode.Descendants("img").FirstOrDefault()?.Attributes["src"]?.Value;
 
-                    // Aktualizacja rekordu w odpowiedniej tabeli w bazie danych
-                    command.CommandText = $"UPDATE {productName} SET name = @name, link = @link, price = @price, image = @image WHERE id= @id";
-                    command.Parameters.AddWithValue("@id", id);
+                    command.CommandText = $"INSERT INTO {productName} (Id, Name, Link, Price, Image) VALUES (@id, @name, @link, @price, @image)";
+                    command.Parameters.AddWithValue("@id", id++);
                     command.Parameters.AddWithValue("@name", name);
                     command.Parameters.AddWithValue("@link", link);
                     command.Parameters.AddWithValue("@price", price);
                     command.Parameters.AddWithValue("@image", image);
+
                     await command.ExecuteNonQueryAsync();
                     command.Parameters.Clear();
-                    id++;
                 }
-
-
-                //foreach (var _product in _products)
-                //{
-                //    var name = _product.Descendants("h3").First().InnerText.Trim();
-                //    var link = _product.Descendants("a").First().Attributes["href"].Value;
-                //    var price = _product.Descendants("span").FirstOrDefault(n => n.Attributes["data-name"]?.Value == "productPrice")?.InnerText.Trim();
-                //    var image = _product.Descendants("img").First().Attributes["src"].Value;
-                //    Console.WriteLine("name:" + name );
-                //    Console.WriteLine("link:" + link );
-                //    Console.WriteLine("price:" + price );
-                //    Console.WriteLine("image:" + image );
-
-
-
-
-                //    // Dodawanie rekordu do odpowiedniej tabeli w bazie danych
-                //    command.CommandText = "INSERT INTO " + productName + " (id ,name, link, price, image) VALUES (@id,@name, @link, @price, @image)";
-                //    command.Parameters.AddWithValue("@id", id);
-                //    command.Parameters.AddWithValue("@name", name);
-                //    command.Parameters.AddWithValue("@link", link);
-                //    command.Parameters.AddWithValue("@price", price);
-                //    command.Parameters.AddWithValue("@image", image);
-                //    await command.ExecuteNonQueryAsync();
-                //    command.Parameters.Clear();
-                //    id++;
-                //}
-
             }
         }
     }
