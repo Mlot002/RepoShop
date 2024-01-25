@@ -1,17 +1,18 @@
-import { useRef } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { publicRequest } from "../requestMethods";
 import Cookies from "universal-cookie";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
   background: linear-gradient(
-      rgba(255, 255, 255, 0.5),
-      rgba(255, 255, 255, 0.5)
-    ),
-    url("https://ro.com.pl/wp-content/uploads/2017/02/programowanie-i-kodowanie.jpg")
-      center;
+    rgba(255, 255, 255, 0.5),
+    rgba(255, 255, 255, 0.5)
+  ),
+  url("https://ro.com.pl/wp-content/uploads/2017/02/programowanie-i-kodowanie.jpg")
+  center;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -35,7 +36,6 @@ const Form = styled.form`
 
 const Input = styled.input`
   flex: 1;
-
   margin: 10px 0px;
   padding: 10px;
 `;
@@ -57,34 +57,73 @@ const Link = styled.a`
   cursor: pointer;
   width: fit-content;
 `;
+
+const ErrorText = styled.p`
+  color: red;
+  margin-top: 10px;
+`;
+
 const Login = () => {
-  const email = useRef(null);
-  const password = useRef(null);
-  const cookies = new Cookies();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     try {
-      const res = await publicRequest.post("users/login", {
-        email: email.current.value,
-        password: password.current.value,
+      const res = await publicRequest.post("http://localhost:3001/api/login", {
+        email,
+        password,
       });
+
       localStorage.setItem("token", res.data.token);
-      console.log("Logged IN");
+      setIsLoggedIn(true);
+      console.log("Logged in successfully");
+
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      setError("Invalid email or password"); // Set an appropriate error message
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
     <Container>
       <Wrapper>
-        <Title>Zaloguj się</Title>
-        <Form onSubmit={handleSubmit}>
-          <Input ref={email} placeholder="Email"></Input>
-          <Input type="password" ref={password} placeholder="Password"></Input>
-          <Button type="submit">Zaloguj</Button>
-          <Link>Zapomniałeś hasła?</Link>
-          <Link href={"/register"}>Utwórz konto</Link>
-        </Form>
+        <Title>Login in!</Title>
+        {isLoggedIn ? (
+          <p>Welcome, you are already logged in!</p>
+        ) : (
+          <Form onSubmit={handleSubmit}>
+            <Input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+            />
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+            />
+            <Button type="submit" disabled={loading}>
+              {loading ? "Logging in..." : "Login"}
+            </Button>
+            <Link>Forget password?</Link>
+            <Link href={"/register"}>Register</Link>
+            {error && <ErrorText>{error}</ErrorText>}
+          </Form>
+        )}
       </Wrapper>
     </Container>
   );
