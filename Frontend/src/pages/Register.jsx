@@ -1,7 +1,7 @@
-// Frontend\src\pages\Register.jsx
 import { useState } from "react";
 import styled from "styled-components";
 import { publicRequest } from "../requestMethods";
+import Modal from 'react-modal';
 
 const Container = styled.div`
   width: 100vw;
@@ -54,6 +54,41 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
+Modal.setAppElement('#root');
+
+const CustomModal = styled(Modal)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+`;
+
+const ModalTitle = styled.h2`
+  color: teal;
+  margin-bottom: 15px;
+`;
+
+const ModalMessage = styled.p`
+  color: #333;
+`;
+
+const CloseButton = styled.button`
+  background-color: teal;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  margin-top: 20px;
+  cursor: pointer;
+  border-radius: 5px;
+`;
+
 const Register = () => {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -63,35 +98,111 @@ const Register = () => {
     confirmPassword: "",
   });
 
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalContent, setModalContent] = useState({});
+
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const isValidName = (name) => {
+    const nameRegex = /^[a-zA-Z]*$/;
+    return nameRegex.test(name);
+  };
+
+  const openModal = (content) => {
+    setModalContent(content);
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Make API request to the register endpoint
-      const res = await publicRequest.post("http://localhost:3001/api/register", formData);
+      if (
+        !formData.firstName ||
+        !formData.lastName ||
+        !formData.email ||
+        !formData.password ||
+        !formData.confirmPassword
+      ) {
+        openModal({
+          title: "Validation Error",
+          message: "Please fill in all fields.",
+        });
+        return;
+      }
 
-      console.log("User registered successfully");
+      if (formData.password !== formData.confirmPassword) {
+        openModal({
+          title: "Validation Error",
+          message: "Passwords do not match.",
+        });
+        return;
+      }
+
+      if (!isValidEmail(formData.email)) {
+        openModal({
+          title: "Validation Error",
+          message: "Please enter a valid email address.",
+        });
+        return;
+      }
+
+      if (!isValidName(formData.firstName) || !isValidName(formData.lastName)) {
+        openModal({
+          title: "Validation Error",
+          message: "Please enter a valid name with only letters.",
+        });
+        return;
+      }
+
+      const res = await publicRequest.post(
+        "http://localhost:3001/api/register",
+        formData
+      );
+
+      openModal({
+        title: "Success",
+        message: "User registered successfully.",
+      });
+
+      setTimeout(() => {
+        window.location.href = "/login"; 
+      }, 2000); 
     } catch (error) {
       console.log(error);
     }
   };
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+
+    if ((name === "firstName" || name === "lastName") && !/^[a-zA-Z]*$/.test(value)) {
+      return;
+    }
+
+    setFormData({ ...formData, [name]: value });
   };
 
   return (
     <Container>
       <Wrapper>
-        <Title>Utwórz konto</Title>
+        <Title>Create an Account</Title>
         <Form onSubmit={handleSubmit}>
           <Input
-            placeholder="Imię"
+            placeholder="First Name"
             name="firstName"
             value={formData.firstName}
             onChange={handleChange}
           />
           <Input
-            placeholder="Nazwisko"
+            placeholder="Last Name"
             name="lastName"
             value={formData.lastName}
             onChange={handleChange}
@@ -110,7 +221,7 @@ const Register = () => {
             onChange={handleChange}
           />
           <Input
-            placeholder="ConfirmPassword"
+            placeholder="Confirm Password"
             type="password"
             name="confirmPassword"
             value={formData.confirmPassword}
@@ -123,6 +234,15 @@ const Register = () => {
           <Button type="submit">Create</Button>
         </Form>
       </Wrapper>
+      <CustomModal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel={modalContent.title}
+      >
+        <ModalTitle>{modalContent.title}</ModalTitle>
+        <ModalMessage>{modalContent.message}</ModalMessage>
+        
+      </CustomModal>
     </Container>
   );
 };
