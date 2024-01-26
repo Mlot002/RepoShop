@@ -1,6 +1,6 @@
-﻿using Microsoft.Data.Sqlite;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Backend.Bean;
 
@@ -8,18 +8,19 @@ namespace Backend.DataGW
 {
     public class SelectGW
     {
-        public static string databasePath = @"C:\Users\48607\Desktop\Project\Reactivities\API\reactivities.db";
+        public static string databasePath = "Data Source=serwere.database.windows.net; Initial Catalog=ParserowaBaza; User Id=Toor69; Password=RootToToor321";
+
 
         public static async Task<List<T>> SelectRecords<T>(string tableName)
         {
             List<T> records = new List<T>();
 
-            using (var connection = new SqliteConnection("Data Source=" + databasePath))
+            using (var connection = new SqlConnection(databasePath))
             {
                 connection.Open();
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = $"SELECT * FROM {tableName} where Id <=25";
+                    command.CommandText = $"SELECT TOP 25 * FROM {tableName}";
                     var reader = await command.ExecuteReaderAsync();
 
                     while (reader.Read())
@@ -38,10 +39,10 @@ namespace Backend.DataGW
         private static T MapToObject<T>(IDataRecord record)
         {
             // Get the values from the reader
-            string id = record.GetString(record.GetOrdinal("Id"));
+            string id = record.GetInt32(record.GetOrdinal("Id")).ToString();
             string name = record.GetString(record.GetOrdinal("name"));
             string link = record.GetString(record.GetOrdinal("link"));
-            string price = record.GetString(record.GetOrdinal("price"));
+            string price = record.GetString(record.GetOrdinal("price")).ToString();
             string imageUrl = record.GetString(record.GetOrdinal("image"));
             string image = RemoveSuffix(imageUrl, "-mini");
 

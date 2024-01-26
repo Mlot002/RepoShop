@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\kryst\\Desktop\\ProjZespParseer\\RepoShop\\Backend\\Backend\\Backend.csproj": {}
+    "C:\\Users\\kryst\\Downloads\\RepoShop-dev\\RepoShop-dev\\Backend\\Backend\\Backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\kryst\\Desktop\\ProjZespParseer\\RepoShop\\Backend\\Backend\\Backend.csproj": {
+    "C:\\Users\\kryst\\Downloads\\RepoShop-dev\\RepoShop-dev\\Backend\\Backend\\Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kryst\\Desktop\\ProjZespParseer\\RepoShop\\Backend\\Backend\\Backend.csproj",
+        "projectUniqueName": "C:\\Users\\kryst\\Downloads\\RepoShop-dev\\RepoShop-dev\\Backend\\Backend\\Backend.csproj",
         "projectName": "Backend",
-        "projectPath": "C:\\Users\\kryst\\Desktop\\ProjZespParseer\\RepoShop\\Backend\\Backend\\Backend.csproj",
+        "projectPath": "C:\\Users\\kryst\\Downloads\\RepoShop-dev\\RepoShop-dev\\Backend\\Backend\\Backend.csproj",
         "packagesPath": "C:\\Users\\kryst\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kryst\\Desktop\\ProjZespParseer\\RepoShop\\Backend\\Backend\\obj\\",
+        "outputPath": "C:\\Users\\kryst\\Downloads\\RepoShop-dev\\RepoShop-dev\\Backend\\Backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\kryst\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -43,10 +43,6 @@
             "HtmlAgilityPack": {
               "target": "Package",
               "version": "[1.11.46, )"
-            },
-            "Microsoft.Data.Sqlite": {
-              "target": "Package",
-              "version": "[7.0.5, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
