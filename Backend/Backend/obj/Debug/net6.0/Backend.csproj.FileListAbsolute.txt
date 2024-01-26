@@ -53,3 +53,14 @@ C:\Portfolio\Warcaby\Backend\Backend\bin\Debug\net6.0\runtimes\win-arm\native\e_
 C:\Portfolio\Warcaby\Backend\Backend\bin\Debug\net6.0\runtimes\win-arm64\native\e_sqlite3.dll
 C:\Portfolio\Warcaby\Backend\Backend\bin\Debug\net6.0\runtimes\win-x64\native\e_sqlite3.dll
 C:\Portfolio\Warcaby\Backend\Backend\bin\Debug\net6.0\runtimes\win-x86\native\e_sqlite3.dll
+C:\Users\kryst\Desktop\ProjZespParseer\RepoShop\Backend\Backend\obj\Debug\net6.0\Backend.csproj.AssemblyReference.cache
+C:\Users\kryst\Desktop\ProjZespParseer\RepoShop\Backend\Backend\obj\Debug\net6.0\Backend.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\kryst\Desktop\ProjZespParseer\RepoShop\Backend\Backend\obj\Debug\net6.0\Backend.AssemblyInfoInputs.cache
+C:\Users\kryst\Desktop\ProjZespParseer\RepoShop\Backend\Backend\obj\Debug\net6.0\Backend.AssemblyInfo.cs
+C:\Users\kryst\Desktop\ProjZespParseer\RepoShop\Backend\Backend\obj\Debug\net6.0\Backend.csproj.CoreCompileInputs.cache
+C:\Users\kryst\Desktop\ProjZespParseer\RepoShop\Backend\Backend\obj\Debug\net6.0\Backend.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\kryst\Desktop\ProjZespParseer\RepoShop\Backend\Backend\obj\Debug\net6.0\Backend.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\kryst\Desktop\ProjZespParseer\RepoShop\Backend\Backend\obj\Debug\net6.0\Backend.sourcelink.json
+C:\Users\kryst\Desktop\ProjZespParseer\RepoShop\Backend\Backend\obj\Debug\net6.0\Backend.dll
+C:\Users\kryst\Desktop\ProjZespParseer\RepoShop\Backend\Backend\obj\Debug\net6.0\refint\Backend.dll
+C:\Users\kryst\Desktop\ProjZespParseer\RepoShop\Backend\Backend\obj\Debug\net6.0\Backend.pdb
