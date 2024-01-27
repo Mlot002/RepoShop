@@ -85,38 +85,37 @@ const RemoveButton = styled.button`
 
 const Like = () => {
   const [favoriteProducts, setFavoriteProducts] = useState([]);
-
   const { user } = useContext(AuthContext);
   const userId = user?.id;
 
+  const fetchFavoriteProducts = async () => {
+    try {
+      const favoritesResponse = await axios.get(`http://localhost:3001/api/favorites?userId=${userId}`);
+      const favorites = favoritesResponse.data.favorites;
+
+      const favoritesWithDetails = await Promise.all(favorites.map(async (favorite) => {
+        const productsResponse = await axios.get(`https://localhost:7080/api/products/${favorite.category}`);
+        const productDetails = productsResponse.data.find(product => product.id.toString() === favorite.product_id.toString());
+
+        return productDetails
+          ? { ...favorite, name: productDetails.name, image: productDetails.image }
+          : favorite;
+      }));
+
+      setFavoriteProducts(favoritesWithDetails);
+    } catch (error) {
+      console.error("Error fetching favorite products: ", error);
+      setFavoriteProducts([]);
+    }
+  };
+
   useEffect(() => {
-    const fetchFavoriteProducts = async () => {
-      try {
-        const favoritesResponse = await axios.get(`http://localhost:3001/api/favorites?userId=${userId}`);
-        const favorites = favoritesResponse.data.favorites;
-
-        const favoritesWithDetails = await Promise.all(favorites.map(async (favorite) => {
-          const productsResponse = await axios.get(`https://localhost:7080/api/products/${favorite.category}`);
-          const productDetails = productsResponse.data.find(product => product.id.toString() === favorite.product_id.toString());
-
-          return productDetails
-            ? { ...favorite, name: productDetails.name, image: productDetails.image }
-            : favorite;
-        }));
-
-        setFavoriteProducts(favoritesWithDetails);
-      } catch (error) {
-        console.error("Error fetching favorite products: ", error);
-        setFavoriteProducts([]);
-      }
-    };
-
     if (userId) {
       fetchFavoriteProducts();
     }
   }, [userId]);
 
-  const removeProductFromWishlist = async (productId, favoriteId, containerSelector) => {
+  const removeProductFromWishlist = async (productId, favoriteId, userId) => {
     try {
       console.log(`Removing favoriteId: ${favoriteId}, userId: ${userId}`);
   
@@ -127,25 +126,17 @@ const Like = () => {
         }
       });
   
-      console.log(response.data); 
+      console.log(response.data);
   
-      
-      const updatedProducts = favoriteProducts.filter(product => product.id.toString() !== productId.toString());
-      setFavoriteProducts(updatedProducts);
+      await fetchFavoriteProducts();
   
-      
-      console.log(`Trying to remove container with selector: ${containerSelector}`);
-      const containerElement = document.querySelector(containerSelector);
-      if (containerElement) {
-        console.log("Container element found, removing...");
-        containerElement.remove();
-      } else {
-        console.log("Container element not found");
-      }
+      setFavoriteProducts(prevProducts => prevProducts.filter(product => product.id !== productId));
     } catch (error) {
       console.error("Error removing product from wishlist: ", error);
     }
   };
+  
+  
 
   return (
     <Container>
@@ -169,12 +160,14 @@ const Like = () => {
                   <ProductName>{favorite.name}</ProductName>
                 </ProductDetails>
               </ProductContainer>
-              <RemoveButton onClick={() => removeProductFromWishlist(favorite.product_id, favorite.favorite_id)}>
-                Remove from wishlist
-              </RemoveButton>
+              <RemoveButton onClick={() => removeProductFromWishlist(favorite.product_id, favorite.favorite_id, userId)}>
+  Remove from wishlist
+</RemoveButton>
             </ProductWrapper>
           ))}
         </Info>
+
+
       </Wrapper>
     </Container>
   );
