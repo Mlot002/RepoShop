@@ -68,21 +68,22 @@ app.post('/api/login', async (req, res) => {
   });
 
   app.delete('/api/remove-favorite', async (req, res) => {
-    const { favoriteId, userId } = req.body;
-    await sql.connect(config);
-    await sql.query `DELETE FROM Favorites WHERE favorite_id = ${favoriteId}`;
-    await sql.close(config);
-
-  console.log(favoriteId);
     try {
-      await db.execute(query);
+      const { favoriteId } = req.body;
+  
+      await sql.connect(config);
+      await sql.query`DELETE FROM Favorites WHERE favorite_id = ${favoriteId}`;
+      await sql.close();
+  
+      console.log(favoriteId);
+  
       res.status(200).send('Product removed from wishlist');
     } catch (error) {
+      console.error(error);
       res.status(500).send('Error removing product from wishlist');
     }
   });
   
-// Register endpoint
 app.post('/api/register', async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
