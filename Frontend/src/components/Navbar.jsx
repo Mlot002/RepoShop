@@ -1,17 +1,19 @@
-import { Search } from "@mui/icons-material";
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { Badge } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { mobile } from "../responsive";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom"; 
 import { publicRequest } from "../requestMethods";
+import { useContext } from "react";
+import AuthContext from '../AuthContext';
 
 const Container = styled.div`
   height: auto;
   ${mobile({ height: "50px" })}
 `;
+
 const Wrapper = styled.div`
   padding: 10px 20px;
   display: flex;
@@ -25,11 +27,13 @@ const Left = styled.div`
   display: flex;
   align-items: center;
 `;
+
 const Language = styled.div`
   font-size: 14px;
   cursor: pointer;
   ${mobile({ display: "none" })}
 `;
+
 const SearchContainer = styled.div`
   border: 0.5px solid lightgray;
   display: flex;
@@ -51,6 +55,7 @@ const Center = styled.div`
   align-items: center;
   justify-content: center;
 `;
+
 const Logo = styled.div`
   font-size: 60px;
   font-weight: bold;
@@ -58,6 +63,7 @@ const Logo = styled.div`
   ${mobile({ fontSize: "24px" })}
   color: black;
 `;
+
 const Right = styled.div`
   flex: 1;
   display: flex;
@@ -65,6 +71,7 @@ const Right = styled.div`
   justify-content: flex-end;
   ${mobile({ flex: 1, justifyContent: "center" })}
 `;
+
 const MenuItem = styled.div`
   color: black;
   font-size: 14px;
@@ -74,54 +81,63 @@ const MenuItem = styled.div`
     font-size: 1.1rem;
     font-weight: 500;
   }
-  /* ${mobile({ fontSize: "12px", marginLeft: "10px" })} */
-  /* ${mobile({ display: "none" })} */
-  ${mobile({ display: "none" })}
 `;
+
 const linkStyle = {
   textDecoration: "none",
 };
 
 const Navbar = () => {
+  const { isLoggedIn, user, login, logout } = useContext(AuthContext);
+
+  console.log("isLoggedIn:", isLoggedIn);
+  console.log("user:", user);
+  console.log()
+
   const [data, setData] = useState();
   useEffect(() => {
     const myFetch = async () => {
-      const res = await publicRequest.get("/carts");
+      const res = await publicRequest.get("/like");
       setData(res.data.data.items.length);
     };
     myFetch();
   }, []);
-  console.log(data);
-  const quantity = useSelector((state) => state.cart.quantity);
+
   return (
     <Container>
       <Wrapper>
-        <Left>
-          <Language>EN</Language>
-          <SearchContainer>
-            <Input placeholder="Search" />
-            <Search style={{ color: "gray", fontSize: 16 }} />
-          </SearchContainer>
-        </Left>
+        <Left>{/* ... */}</Left>
         <Center>
-          <Link to={"../"} style={linkStyle}>
+          <Link to={"/"} style={linkStyle}>
             <Logo>BestSalesHub</Logo>
           </Link>
         </Center>
         <Right>
-          <Link to={"/login"}>
-            <MenuItem>ZALOGUJ SIĘ</MenuItem>
-          </Link>
-          <Link to={"/register"}>
-            <MenuItem>ZAREJESTRUJ SIĘ</MenuItem>
-          </Link>
-          <Link to={"/like"}>
-            <MenuItem>
-              <Badge badgeContent={data || 0} color="primary">
-                <FavoriteBorderIcon  />
-              </Badge>
-            </MenuItem>
-          </Link>
+        {isLoggedIn ? (
+  <>
+    <Link to={"/like"}>
+      <MenuItem>
+        <Badge badgeContent={data || 0} color="primary">
+          <FavoriteIcon />
+        </Badge>
+      </MenuItem>
+    </Link>
+    <Link to ={"/"}>
+    <MenuItem onClick={logout} to ={"/"}>
+      <ExitToAppIcon />
+    </MenuItem>
+    </Link>
+  </>
+) : (
+  <>
+    <Link to={"/login"}>
+      <MenuItem>ZALOGUJ SIĘ</MenuItem>
+    </Link>
+    <Link to={"/register"}>
+      <MenuItem>ZAREJESTRUJ SIĘ</MenuItem>
+    </Link>
+  </>
+)}
         </Right>
       </Wrapper>
     </Container>

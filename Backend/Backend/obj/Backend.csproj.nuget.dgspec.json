@@ -1,27 +1,26 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\kryst\\Desktop\\ProjZespParseer\\RepoShop\\Backend\\Backend\\Backend.csproj": {}
+    "/Users/dawidmaciejewski/Desktop/RepoShop-develop/Backend/Backend/Backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\kryst\\Desktop\\ProjZespParseer\\RepoShop\\Backend\\Backend\\Backend.csproj": {
+    "/Users/dawidmaciejewski/Desktop/RepoShop-develop/Backend/Backend/Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kryst\\Desktop\\ProjZespParseer\\RepoShop\\Backend\\Backend\\Backend.csproj",
+        "projectUniqueName": "/Users/dawidmaciejewski/Desktop/RepoShop-develop/Backend/Backend/Backend.csproj",
         "projectName": "Backend",
-        "projectPath": "C:\\Users\\kryst\\Desktop\\ProjZespParseer\\RepoShop\\Backend\\Backend\\Backend.csproj",
-        "packagesPath": "C:\\Users\\kryst\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kryst\\Desktop\\ProjZespParseer\\RepoShop\\Backend\\Backend\\obj\\",
+        "projectPath": "/Users/dawidmaciejewski/Desktop/RepoShop-develop/Backend/Backend/Backend.csproj",
+        "packagesPath": "/Users/dawidmaciejewski/.nuget/packages/",
+        "outputPath": "/Users/dawidmaciejewski/Desktop/RepoShop-develop/Backend/Backend/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\kryst\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/Users/dawidmaciejewski/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "/usr/local/share/dotnet/library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -44,13 +43,13 @@
               "target": "Package",
               "version": "[1.11.46, )"
             },
-            "Microsoft.Data.Sqlite": {
-              "target": "Package",
-              "version": "[7.0.5, )"
-            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.2.3, )"
+            },
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.8.6, )"
             }
           },
           "imports": [
@@ -64,24 +63,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[6.0.26, 6.0.26]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[6.0.26, 6.0.26]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[6.0.26, 6.0.26]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[6.0.26, 6.0.26]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -90,7 +71,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.100/RuntimeIdentifierGraph.json"
         }
       }
     }

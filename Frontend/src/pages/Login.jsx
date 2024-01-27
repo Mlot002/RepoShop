@@ -1,8 +1,7 @@
-import { useState } from "react";
-import styled from "styled-components";
-import { publicRequest } from "../requestMethods";
-import Cookies from "universal-cookie";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import AuthContext from '../AuthContext';
 
 const Container = styled.div`
   width: 100vw;
@@ -68,7 +67,11 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Use the AuthContext
+  const { login, isLoggedIn } = useContext(AuthContext);
+
+  // Get the navigate function
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -76,21 +79,17 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const res = await publicRequest.post("http://localhost:3001/api/login", {
-        email,
-        password,
-      });
+      // Call the login function from AuthContext
+      await login(email, password);
 
-      localStorage.setItem("token", res.data.token);
-      setIsLoggedIn(true);
       console.log("Logged in successfully");
-
+      
       setTimeout(() => {
         navigate("/");
       }, 1000);
     } catch (error) {
       console.error(error);
-      setError("Invalid email or password"); // Set an appropriate error message
+      setError("Invalid email or password");
     } finally {
       setLoading(false);
     }
@@ -100,30 +99,26 @@ const Login = () => {
     <Container>
       <Wrapper>
         <Title>Login in!</Title>
-        {isLoggedIn ? (
-          <p>Welcome, you are already logged in!</p>
-        ) : (
-          <Form onSubmit={handleSubmit}>
-            <Input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email"
-            />
-            <Input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-            />
-            <Button type="submit" disabled={loading}>
-              {loading ? "Logging in..." : "Login"}
-            </Button>
-            <Link>Forget password?</Link>
-            <Link href={"/register"}>Register</Link>
-            {error && <ErrorText>{error}</ErrorText>}
-          </Form>
-        )}
+        <Form onSubmit={handleSubmit}>
+          <Input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
+          />
+          <Input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+          />
+          <Button type="submit" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
+          </Button>
+          <Link>Forget password?</Link>
+          <Link href={"/register"}>Register</Link>
+          {error && <ErrorText>{error}</ErrorText>}
+        </Form>
       </Wrapper>
     </Container>
   );
